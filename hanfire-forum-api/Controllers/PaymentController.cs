@@ -1,4 +1,5 @@
 ﻿using HangfireForum.Domain.Common.Requests;
+using HangfireForum.Services.PaymentService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace hanfire_forum_api.Controllers
@@ -7,11 +8,20 @@ namespace hanfire_forum_api.Controllers
     [Route("[controller]")]
     public class PaymentController : Controller
     {
-        [HttpPost]
-        [Route('payments')]
-        public Task<IActionResult> SubmitPayment([FromBody] PaymentRequest paymentRequest)
-        {
+        private readonly IPaymentService _paymentService;
 
+        public PaymentController(IPaymentService paymentService)
+        {
+            this._paymentService = paymentService;
+        }
+
+        [HttpPost]
+        [Route("payments")]
+        public async Task<IActionResult> SubmitPayment([FromBody] PaymentRequest paymentRequest)
+        {
+            await this._paymentService.ProcessPayment(paymentRequest);
+
+            return Ok();
         }
     }
 }

@@ -2,6 +2,7 @@
 {
     public enum PaymentStatus
     {
+        Initiated,
         Pending,
         Suspense,
         Clearing,
