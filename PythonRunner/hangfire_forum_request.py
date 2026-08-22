@@ -1,80 +1,70 @@
-import time
 import requests
-from datetime import datetime
+import uuid
+import time
+from datetime import datetime, timezone
+
 
 # ==============================
 # Configuration
 # ==============================
 
-API_URL = "http://localhost:5000/api/payments"
+ENDPOINT = "https://localhost:7208/Payment/payments"
 
-REQUESTS_PER_SECOND = 5
-TOTAL_REQUESTS = 100
+NUMBER_OF_REQUESTS = 500
+REQUEST_RATE_SECONDS = 0.05
 
-PAYMENT_NAME = "Forum Demo Customer"
-PAYMENT_AMOUNT = 100.00
 
 # ==============================
-# Request generation
+# Send requests
 # ==============================
 
-interval = 1 / REQUESTS_PER_SECOND
+total_start = time.perf_counter()
 
-successful = 0
-failed = 0
+for i in range(1, NUMBER_OF_REQUESTS + 1):
 
-print(f"Sending {TOTAL_REQUESTS} requests")
-print(f"Rate: {REQUESTS_PER_SECOND} requests/second")
-print(f"Endpoint: {API_URL}")
-print()
-
-start_time = time.perf_counter()
-
-for i in range(TOTAL_REQUESTS):
-
-    payload = {
-        "name": PAYMENT_NAME,
-        "amount": PAYMENT_AMOUNT,
-        "date": datetime.now().isoformat()
+    payment = {
+        "paymentId": str(uuid.uuid4()),
+        "name": "My Payment",
+        "value": 100,
+        "submissionDate": datetime.now(timezone.utc).isoformat()
     }
+
+    start = time.perf_counter()
 
     try:
         response = requests.post(
-            API_URL,
-            json=payload,
-            timeout=10
+            ENDPOINT,
+            json=payment,
+            verify=False
         )
 
-        if 200 <= response.status_code < 300:
-            successful += 1
-            status = "OK"
-        else:
-            failed += 1
-            status = f"HTTP {response.status_code}"
+        elapsed = time.perf_counter() - start
 
         print(
-            f"[{i + 1}/{TOTAL_REQUESTS}] "
-            f"{status} - "
-            f"{payload['amount']:.2f}"
+            f"Request {i}/{NUMBER_OF_REQUESTS} | "
+            f"PaymentId: {payment['paymentId']} | "
+            f"Status: {response.status_code} | "
+            f"Time: {elapsed:.3f}s"
         )
 
     except requests.RequestException as e:
-        failed += 1
-        print(f"[{i + 1}/{TOTAL_REQUESTS}] ERROR - {e}")
+        elapsed = time.perf_counter() - start
 
-    # Maintain the requested rate
-    target_time = start_time + ((i + 1) * interval)
-    sleep_time = target_time - time.perf_counter()
+        print(
+            f"Request {i}/{NUMBER_OF_REQUESTS} | "
+            f"FAILED | "
+            f"Time: {elapsed:.3f}s | "
+            f"Error: {e}"
+        )
 
-    if sleep_time > 0:
-        time.sleep(sleep_time)
+    if i < NUMBER_OF_REQUESTS:
+        time.sleep(REQUEST_RATE_SECONDS)
 
 
-elapsed = time.perf_counter() - start_time
+total_elapsed = time.perf_counter() - total_start
 
 print()
-print("========== Complete ==========")
-print(f"Successful : {successful}")
-print(f"Failed     : {failed}")
-print(f"Elapsed    : {elapsed:.2f}s")
-print(f"Actual rate: {TOTAL_REQUESTS / elapsed:.2f} requests/sec")
+print("==============================")
+print(f"Total requests: {NUMBER_OF_REQUESTS}")
+print(f"Total time:     {total_elapsed:.3f}s")
+print("==============================")
