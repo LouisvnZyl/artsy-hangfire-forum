@@ -1,82 +1,80 @@
-import argparse
 import time
 import requests
+from datetime import datetime
 
-def main():
-    parser = argparse.ArgumentParser(description="Continuously send payment POST requests at a controlled rate.")
-    parser.add_argument("--url", required=True, help="API POST endpoint")
-    parser.add_argument("--rate", type=float, required=True, help="Requests per second")
-    parser.add_argument("--count", type=int, required=True, help="Total number of requests")
-    parser.add_argument("--name", default="Forum Demo Customer", help="Payment name")
-    parser.add_argument("--amount", type=float, default=100.00, help="Payment amount")
-    parser.add_argument("--timeout", type=float, default=10, help="HTTP timeout in seconds")
-    args = parser.parse_args()
+# ==============================
+# Configuration
+# ==============================
 
-    if args.rate <= 0:
-        raise ValueError("--rate must be greater than 0")
-    if args.count <= 0:
-        raise ValueError("--count must be greater than 0")
+API_URL = "http://localhost:5000/api/payments"
 
-    interval = 1.0 / args.rate
+REQUESTS_PER_SECOND = 5
+TOTAL_REQUESTS = 100
 
-    print(f"Sending {args.count} requests to {args.url}")
-    print(f"Rate: {args.rate:g} requests/sec ({interval:.3f}s between requests)")
-    print()
+PAYMENT_NAME = "Forum Demo Customer"
+PAYMENT_AMOUNT = 100.00
 
-    successful = 0
-    failed = 0
+# ==============================
+# Request generation
+# ==============================
 
-    start = time.perf_counter()
+interval = 1 / REQUESTS_PER_SECOND
 
-    for i in range(args.count):
-        request_start = time.perf_counter()
+successful = 0
+failed = 0
 
-        payload = {
-            "name": args.name,
-            "amount": args.amount,
-            "date": time.strftime("%Y-%m-%dT%H:%M:%S")
-        }
+print(f"Sending {TOTAL_REQUESTS} requests")
+print(f"Rate: {REQUESTS_PER_SECOND} requests/second")
+print(f"Endpoint: {API_URL}")
+print()
 
-        try:
-            response = requests.post(
-                args.url,
-                json=payload,
-                timeout=args.timeout
-            )
+start_time = time.perf_counter()
 
-            if 200 <= response.status_code < 300:
-                successful += 1
-                result = "OK"
-            else:
-                failed += 1
-                result = f"HTTP {response.status_code}"
+for i in range(TOTAL_REQUESTS):
 
-            print(
-                f"[{i + 1:>5}/{args.count}] "
-                f"{result:<12} "
-                f"amount={args.amount:.2f}"
-            )
+    payload = {
+        "name": PAYMENT_NAME,
+        "amount": PAYMENT_AMOUNT,
+        "date": datetime.now().isoformat()
+    }
 
-        except requests.RequestException as exc:
+    try:
+        response = requests.post(
+            API_URL,
+            json=payload,
+            timeout=10
+        )
+
+        if 200 <= response.status_code < 300:
+            successful += 1
+            status = "OK"
+        else:
             failed += 1
-            print(f"[{i + 1:>5}/{args.count}] ERROR       {exc}")
+            status = f"HTTP {response.status_code}"
 
-        # Keep the request *start times* approximately rate-limited.
-        next_request = start + (i + 1) * interval
-        sleep_for = next_request - time.perf_counter()
+        print(
+            f"[{i + 1}/{TOTAL_REQUESTS}] "
+            f"{status} - "
+            f"{payload['amount']:.2f}"
+        )
 
-        if sleep_for > 0:
-            time.sleep(sleep_for)
+    except requests.RequestException as e:
+        failed += 1
+        print(f"[{i + 1}/{TOTAL_REQUESTS}] ERROR - {e}")
 
-    elapsed = time.perf_counter() - start
+    # Maintain the requested rate
+    target_time = start_time + ((i + 1) * interval)
+    sleep_time = target_time - time.perf_counter()
 
-    print()
-    print("Completed")
-    print(f"Successful: {successful}")
-    print(f"Failed:     {failed}")
-    print(f"Elapsed:    {elapsed:.2f}s")
-    print(f"Actual rate: {args.count / elapsed:.2f} requests/sec")
+    if sleep_time > 0:
+        time.sleep(sleep_time)
 
 
-if __name__ == "__main__":
-    main()
+elapsed = time.perf_counter() - start_time
+
+print()
+print("========== Complete ==========")
+print(f"Successful : {successful}")
+print(f"Failed     : {failed}")
+print(f"Elapsed    : {elapsed:.2f}s")
+print(f"Actual rate: {TOTAL_REQUESTS / elapsed:.2f} requests/sec")
