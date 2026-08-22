@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>hanfire_forum_api</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HanfireForum.Data\HanfireForum.Data.csproj" />
+    <ProjectReference Include="..\HangfireForum.Domain.Common\HangfireForum.Domain.Common.csproj" />
+    <ProjectReference Include="..\HangfireForum.Services\HangfireForum.Services.csproj" />
+  </ItemGroup>
+
+</Project>
