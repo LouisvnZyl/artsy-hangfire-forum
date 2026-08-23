@@ -3,7 +3,6 @@ using HanfireForum.Data.DataServices;
 using HanfireForum.Data.Models;
 using HangfireForum.BackgroundProcessing.JobArgs;
 using HangfireForum.BackgroundProcessing.Scheduler;
-using HangfireForum.Domain.Common.Enums;
 
 namespace HangfireForum.Services.SuspenseTransferService
 {

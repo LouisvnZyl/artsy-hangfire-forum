@@ -23,6 +23,15 @@ namespace HanfireForum.Data.Models
             this.Status = PaymentStatus.TransferredToSuspense;
         }
 
+        public void MarkAsPaymentTransferringToRecipient()
+        {
+            this.Status = PaymentStatus.TransferringToRecipient;
+        }
+        public void MarkAsPaymentTransferredToRecipient()
+        {
+            this.Status = PaymentStatus.TransferredToRecipient;
+        }
+
         public void MarkAsPaymentSuccessful()
         {
             this.Status = PaymentStatus.Completed;

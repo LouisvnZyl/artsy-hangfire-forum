@@ -12,7 +12,7 @@
         TransferredToSuspense,
 
         TransferringToRecipient,
-        PaymentPending,
+        TransferredToRecipient,
 
         Completed,
         Failed
