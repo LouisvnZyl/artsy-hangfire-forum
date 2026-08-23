@@ -41,8 +41,8 @@ builder.Services.AddHangfire(configuration =>
         .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
         .UseSimpleAssemblyNameTypeSerializer()
         .UseRecommendedSerializerSettings()
-        .UseRedisStorage(
-            builder.Configuration.GetConnectionString("Redis")!);
+        .UseSqlServerStorage(
+            builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 builder.Services.AddHangfireServer();
