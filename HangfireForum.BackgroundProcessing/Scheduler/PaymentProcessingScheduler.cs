@@ -20,27 +20,27 @@ namespace HangfireForum.BackgroundProcessing.Scheduler
 
         public void ScheduleSuspenseTransferFailure(SuspenseTransferJobArgs jobParams)
         {
-            throw new NotImplementedException();
+            this._scheduler.Enqueue<PaymentSuspenseTransferFailureJob, SuspenseTransferJobArgs>(jobParams);
         }
 
         public void ScheduleSuspenseTransferSuccess(SuspenseTransferJobArgs jobParams)
         {
-            throw new NotImplementedException();
+            this._scheduler.Enqueue<PaymentSuspenseTransferSuccessJob, SuspenseTransferJobArgs>(jobParams);
         }
 
         public void SchedulePaymentSubmission(PaymentSubmissionJobArgs jobParams)
         {
-            throw new NotImplementedException();
+            this._scheduler.Enqueue<PaymentSubmissionJob, PaymentSubmissionJobArgs>(jobParams);
         }
 
         public void SchedulePaymentSubmissionFailure(PaymentSubmissionJobArgs jobParams)
         {
-            throw new NotImplementedException();
+            this._scheduler.Enqueue<PaymentSubmissionFailureJob, PaymentSubmissionJobArgs>(jobParams);
         }
 
         public void SchedulePaymentSubmissionSuccess(PaymentSubmissionJobArgs jobParams)
         {
-            throw new NotImplementedException();
+            this._scheduler.Enqueue<PaymentSubmissionSuccessJob, PaymentSubmissionJobArgs>(jobParams);
         }
     }
 }
