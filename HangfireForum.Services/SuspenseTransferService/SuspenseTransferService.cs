@@ -29,9 +29,9 @@ namespace HangfireForum.Services.SuspenseTransferService
 
             await this._dataService.SaveChanges();
 
-            await Task.Delay(200);
+            await Task.Delay(300);
 
-            if (Random.Shared.Next(0, 2) == 0)
+            if (Random.Shared.Next(0, 10) == 0)
             {
                 payment.Status = PaymentStatus.Failed;
 
