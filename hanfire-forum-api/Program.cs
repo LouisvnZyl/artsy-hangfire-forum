@@ -1,6 +1,9 @@
 using HanfireForum.Data.DataServices;
 using HanfireForum.Data.EntityFramework;
 using HangfireForum.Services.PaymentService;
+using HangfireForum.Services.PaymentSubmissionService;
+using HangfireForum.Services.SuspenseTransferService;
+using HangfireForum.Services.Validation;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +21,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IPaymentDataService, PaymentDataService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<IPaymentValidationService, PaymentValidationService>();
+builder.Services.AddScoped<ISuspenseTransferService, SuspenseTransferService>();
+builder.Services.AddScoped<IPaymentSubmissionService, PaymentSubmissionService>();
 
 var app = builder.Build();
 

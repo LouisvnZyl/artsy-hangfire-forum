@@ -12,6 +12,9 @@ namespace HanfireForum.Data.EntityFramework
         }
 
         public DbSet<PaymentRequestModel> Payments => Set<PaymentRequestModel>();
+        public DbSet<SuspenseTransactionModel> SuspenseTransactions { get; set; }
+
+        public DbSet<PaymentSubmissionModel> PaymentSubmissions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -38,6 +41,22 @@ namespace HanfireForum.Data.EntityFramework
                     .HasConversion<string>()
                     .IsRequired();
             });
+
+            modelBuilder.Entity<SuspenseTransactionModel>()
+                        .HasKey(x => x.Id);
+
+            modelBuilder.Entity<SuspenseTransactionModel>()
+                        .HasOne(x => x.Payment)
+                        .WithOne(x => x.SuspenseTransaction)
+                        .HasForeignKey<SuspenseTransactionModel>(x => x.PaymentId);
+
+            modelBuilder.Entity<PaymentSubmissionModel>()
+                        .HasKey(x => x.Id);
+
+            modelBuilder.Entity<PaymentSubmissionModel>()
+                        .HasOne(x => x.Payment)
+                        .WithOne(x => x.PaymentSubmission)
+                        .HasForeignKey<PaymentSubmissionModel>(x => x.PaymentId);
         }
     }
 }

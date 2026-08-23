@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 
 ENDPOINT = "https://localhost:7208/Payment/payments"
 
-NUMBER_OF_REQUESTS = 500
+NUMBER_OF_REQUESTS = 1
 REQUEST_RATE_SECONDS = 0.05
 
 
