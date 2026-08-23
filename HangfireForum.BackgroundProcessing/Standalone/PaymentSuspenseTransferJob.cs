@@ -22,8 +22,6 @@ namespace HangfireForum.BackgroundProcessing.Standalone
             {
                 throw new Exception($"Failed to transfer payment {jobParams.PaymentId} to suspense: {result.FirstError.Description}");
             }
-
-            throw new NotImplementedException();
         }
     }
 }
