@@ -2,6 +2,7 @@
 using HanfireForum.Data.Models;
 using HangfireForum.Domain.Common.Enums;
 using HangfireForum.Domain.Common.Requests;
+using Microsoft.EntityFrameworkCore;
 
 namespace HanfireForum.Data.DataServices
 {
@@ -35,6 +36,31 @@ namespace HanfireForum.Data.DataServices
             {
                 throw;
             }
+        }
+
+        public async Task<PaymentRequestModel?> GetPayment(Guid paymentId)
+        {
+            return await this._dbContext.Payments
+                                        .Include(x => x.SuspenseTransaction)
+                                        .Include(x => x.PaymentSubmission)
+                                        .FirstOrDefaultAsync(x => x.PaymentId == paymentId);
+        }
+
+        public async Task CreateSuspenseTransaction(SuspenseTransactionModel suspenseTransaction)
+        {
+            await _dbContext.SuspenseTransactions.AddAsync(suspenseTransaction);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task CreatePaymentSubmission(PaymentSubmissionModel paymentSubmission)
+        {
+            await _dbContext.PaymentSubmissions.AddAsync(paymentSubmission);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task SaveChanges()
+        {
+            await _dbContext.SaveChangesAsync();
         }
     }
 }
