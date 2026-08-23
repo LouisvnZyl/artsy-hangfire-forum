@@ -35,9 +35,12 @@ namespace HangfireForum.Services.SuspenseTransferService
 
             await Task.Delay(300);
 
+            // Forced Failure
             if (Random.Shared.Next(0, 10) == 0)
             {
                 this._paymentProcessingScheduler.ScheduleSuspenseTransferFailure(new SuspenseTransferJobArgs(paymentId));
+
+                return Error.Failure("Payment Suspense Transfer Failed.");
             }
 
             var suspenseTransaction = new SuspenseTransactionModel

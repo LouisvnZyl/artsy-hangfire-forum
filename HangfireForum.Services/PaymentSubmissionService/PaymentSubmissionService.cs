@@ -43,9 +43,12 @@ namespace HangfireForum.Services.PaymentSubmissionService
 
             await Task.Delay(2000);
 
+            // Forced Failure
             if (Random.Shared.Next(0, 10) == 0)
             {
                 this._paymentProcessingScheduler.SchedulePaymentSubmissionFailure(new PaymentSubmissionJobArgs(paymentId));
+
+                return Error.Failure("Payment Submission Failed.");
             }
 
             var paymentSubmission = new PaymentSubmissionModel

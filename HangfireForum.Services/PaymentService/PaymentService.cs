@@ -44,20 +44,6 @@ namespace HangfireForum.Services.PaymentService
 
             this._paymentProcessingScheduler.ScheduleSuspenseTransfer(new SuspenseTransferJobArgs(paymentRequest.PaymentId));
 
-            //var suspenseTransferResult = await this._suspenseTransferService.TransferToSuspense(paymentRequest.PaymentId);
-
-            //if (suspenseTransferResult.IsError)
-            //{
-            //    return suspenseTransferResult.Errors;
-            //}
-
-            //var paymentSubmissionResult = await this._paymentSubmissionService.SubmitPayment(paymentRequest.PaymentId);
-
-            //if (paymentSubmissionResult.IsError)
-            //{
-            //    return paymentSubmissionResult.Errors;
-            //}
-
             return Result.Success;
         }
     }
