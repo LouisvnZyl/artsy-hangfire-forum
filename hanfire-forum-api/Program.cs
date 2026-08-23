@@ -1,5 +1,7 @@
 using HanfireForum.Data.DataServices;
 using HanfireForum.Data.EntityFramework;
+using Hangfire;
+using Hangfire.Redis.StackExchange;
 using HangfireForum.Services.PaymentService;
 using HangfireForum.Services.PaymentSubmissionService;
 using HangfireForum.Services.SuspenseTransferService;
@@ -24,6 +26,16 @@ builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IPaymentValidationService, PaymentValidationService>();
 builder.Services.AddScoped<ISuspenseTransferService, SuspenseTransferService>();
 builder.Services.AddScoped<IPaymentSubmissionService, PaymentSubmissionService>();
+
+builder.Services.AddHangfire(configuration =>
+{
+    configuration
+        .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+        .UseSimpleAssemblyNameTypeSerializer()
+        .UseRecommendedSerializerSettings()
+        .UseRedisStorage(
+            builder.Configuration.GetConnectionString("Redis")!);
+});
 
 var app = builder.Build();
 
