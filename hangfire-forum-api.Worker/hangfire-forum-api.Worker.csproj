@@ -18,4 +18,10 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\HanfireForum.Data\HanfireForum.Data.csproj" />
+    <ProjectReference Include="..\HangfireForum.BackgroundProcessing\HangfireForum.BackgroundProcessing.csproj" />
+    <ProjectReference Include="..\HangfireForum.Services\HangfireForum.Services.csproj" />
+  </ItemGroup>
+
 </Project>

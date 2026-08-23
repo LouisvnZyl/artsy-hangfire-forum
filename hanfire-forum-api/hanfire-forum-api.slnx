@@ -1,6 +1,7 @@
 <Solution>
   <Project Path="../HanfireForum.Data/HanfireForum.Data.csproj" Id="2c594a9c-afb9-4ea9-aea4-458d128b37c8" />
   <Project Path="../hangfire-forum-api.Worker/hangfire-forum-api.Worker.csproj" Id="6975b274-0d48-406e-aa09-6c12a159b762" />
+  <Project Path="../HangfireForum.BackgroundProcessing/HangfireForum.BackgroundProcessing.csproj" Id="ac83df61-e6e5-4c88-ae59-fb4ec3389471" />
   <Project Path="../HangfireForum.Domain.Common/HangfireForum.Domain.Common.csproj" Id="a7dcff51-0610-4985-bd1e-cce30ab034cd" />
   <Project Path="../HangfireForum.Services/HangfireForum.Services.csproj" Id="78d6ad04-2e19-41e5-b750-bfdc0dbf39dd" />
   <Project Path="hanfire-forum-api.csproj" />

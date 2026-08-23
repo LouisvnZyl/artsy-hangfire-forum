@@ -8,6 +8,11 @@
 
   <ItemGroup>
     <PackageReference Include="ErrorOr" Version="2.1.1" />
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.8.24" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HangfireForum.Domain.Common\HangfireForum.Domain.Common.csproj" />
   </ItemGroup>
 
 </Project>

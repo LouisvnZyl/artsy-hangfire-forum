@@ -2,6 +2,9 @@ using HanfireForum.Data.DataServices;
 using HanfireForum.Data.EntityFramework;
 using Hangfire;
 using Hangfire.Redis.StackExchange;
+using HangfireForum.BackgroundProcessing.Base;
+using HangfireForum.BackgroundProcessing.Scheduler;
+using HangfireForum.Domain.Common.Services;
 using HangfireForum.Services.PaymentService;
 using HangfireForum.Services.PaymentSubmissionService;
 using HangfireForum.Services.SuspenseTransferService;
@@ -26,6 +29,7 @@ builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IPaymentValidationService, PaymentValidationService>();
 builder.Services.AddScoped<ISuspenseTransferService, SuspenseTransferService>();
 builder.Services.AddScoped<IPaymentSubmissionService, PaymentSubmissionService>();
+builder.Services.AddScoped<IPaymentProcessingScheduler, PaymentProcessingScheduler>();
 
 builder.Services.AddHangfire(configuration =>
 {
@@ -36,6 +40,8 @@ builder.Services.AddHangfire(configuration =>
         .UseRedisStorage(
             builder.Configuration.GetConnectionString("Redis")!);
 });
+
+builder.Services.AddScoped<IScheduler, HangfireJobScheduler>();
 
 var app = builder.Build();
 
