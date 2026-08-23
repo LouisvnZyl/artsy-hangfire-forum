@@ -34,6 +34,12 @@ builder.Services.AddScoped<IPaymentProcessingScheduler, PaymentProcessingSchedul
 
 // Register Jobs
 builder.Services.AddScoped<PaymentSuspenseTransferJob>();
+builder.Services.AddScoped<PaymentSuspenseTransferSuccessJob>();
+builder.Services.AddScoped<PaymentSuspenseTransferFailureJob>();
+
+builder.Services.AddScoped<PaymentSubmissionJob>();
+builder.Services.AddScoped<PaymentSubmissionSuccessJob>();
+builder.Services.AddScoped<PaymentSubmissionFailureJob>();
 
 builder.Services.AddHangfire(configuration =>
 {
