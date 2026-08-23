@@ -36,11 +36,9 @@ namespace HangfireForum.Services.PaymentSubmissionService
 
             await _dataService.SaveChanges();
 
-            // Simulate processing
             await Task.Delay(2000);
 
-            // 50% chance of failure
-            if (Random.Shared.Next(0, 2) == 0)
+            if (Random.Shared.Next(0, 10) == 0)
             {
                 payment.Status = PaymentStatus.Failed;
 

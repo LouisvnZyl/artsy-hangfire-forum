@@ -1,0 +1,6 @@
+@hangfire_forum_api.Worker_HostAddress = http://localhost:5084
+
+GET {{hangfire_forum_api.Worker_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
