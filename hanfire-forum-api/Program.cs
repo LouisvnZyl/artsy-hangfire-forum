@@ -1,6 +1,7 @@
 using HanfireForum.Data.DataServices;
 using HanfireForum.Data.EntityFramework;
 using HangfireForum.Services.PaymentService;
+using HangfireForum.Services.Validation;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IPaymentDataService, PaymentDataService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<IPaymentValidationService, PaymentValidationService>();
 
 var app = builder.Build();
 
