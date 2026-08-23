@@ -46,6 +46,16 @@ namespace HanfireForum.Data.DataServices
                                         .FirstOrDefaultAsync(x => x.PaymentId == paymentId);
         }
 
+        public async Task<IEnumerable<PaymentRequestModel>> GetExpiredPayments()
+        {
+            var expirationTime = DateTime.UtcNow.AddMinutes(-30);
+
+            return await this._dbContext.Payments
+                                        .Where(x => (x.Status != PaymentStatus.Completed && x.Status != PaymentStatus.Failed) &&
+                                                    x.SubmissionDate <= expirationTime)
+                                        .ToListAsync();
+        }
+
         public async Task CreateSuspenseTransaction(SuspenseTransactionModel suspenseTransaction)
         {
             await _dbContext.SuspenseTransactions.AddAsync(suspenseTransaction);

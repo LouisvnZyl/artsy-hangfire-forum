@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\HanfireForum.Data\HanfireForum.Data.csproj" />
     <ProjectReference Include="..\HangfireForum.Domain.Common\HangfireForum.Domain.Common.csproj" />
   </ItemGroup>
 

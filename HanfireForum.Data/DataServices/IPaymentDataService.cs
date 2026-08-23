@@ -9,6 +9,7 @@ namespace HanfireForum.Data.DataServices
         Task<PaymentRequestModel?> GetPayment(Guid paymentId);
         Task CreateSuspenseTransaction(SuspenseTransactionModel suspenseTransaction);
         Task CreatePaymentSubmission(PaymentSubmissionModel paymentSubmission);
+        Task<IEnumerable<PaymentRequestModel>> GetExpiredPayments();
         Task SaveChanges();
     }
 }

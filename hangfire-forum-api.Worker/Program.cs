@@ -3,6 +3,7 @@ using HanfireForum.Data.EntityFramework;
 using Hangfire;
 using Hangfire.Redis.StackExchange;
 using HangfireForum.BackgroundProcessing.Base;
+using HangfireForum.BackgroundProcessing.Recurring;
 using HangfireForum.BackgroundProcessing.Scheduler;
 using HangfireForum.BackgroundProcessing.Standalone;
 using HangfireForum.Domain.Common.Services;
@@ -56,6 +57,17 @@ builder.Services.AddHangfireServer();
 builder.Services.AddScoped<IScheduler, HangfireJobScheduler>();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var recurringJobManager = scope.ServiceProvider
+        .GetRequiredService<IRecurringJobManager>();
+
+    recurringJobManager.AddOrUpdate<PaymentExpirationJob>(
+        "payment-expiration-job",
+        job => job.ExecuteJobAsync(),
+        Cron.MinuteInterval(1));
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
