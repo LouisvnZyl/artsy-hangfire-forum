@@ -41,7 +41,13 @@ namespace HangfireForum.Services.PaymentSubmissionService
 
             await _dataService.SaveChanges();
 
-            await Task.Delay(2000);
+            await Task.Delay(500);
+
+            // Forced Hanging Process
+            if (Random.Shared.Next(0, 10) == 0)
+            {
+                return Result.Success;
+            }
 
             // Forced Failure
             if (Random.Shared.Next(0, 10) == 0)

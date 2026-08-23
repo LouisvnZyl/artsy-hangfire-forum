@@ -35,6 +35,12 @@ namespace HangfireForum.Services.SuspenseTransferService
 
             await Task.Delay(300);
 
+            // Forced Hanging Process
+            if (Random.Shared.Next(0, 10) == 0)
+            {
+                return Result.Success;
+            }
+
             // Forced Failure
             if (Random.Shared.Next(0, 10) == 0)
             {
