@@ -9,5 +9,8 @@ namespace HanfireForum.Data.Models
         public decimal Value { get; set; }
         public DateTimeOffset SubmissionDate { get; set; }
         public PaymentStatus Status { get; set; }
+        public SuspenseTransactionModel? SuspenseTransaction { get; set; }
+
+        public PaymentSubmissionModel? PaymentSubmission { get; set; }
     }
 }
