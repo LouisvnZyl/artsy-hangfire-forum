@@ -3,10 +3,17 @@
     public enum PaymentStatus
     {
         Initiated,
-        Pending,
-        Suspense,
-        Clearing,
-        Processing,
+
+        Received,
+        ValidationFailed,
+        Validated,
+
+        TransferringToSuspense,
+        TransferredToSuspense,
+
+        TransferringToRecipient,
+        PaymentPending,
+
         Completed,
         Failed
     }
