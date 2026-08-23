@@ -1,6 +1,8 @@
 ﻿using ErrorOr;
 using HanfireForum.Data.DataServices;
 using HanfireForum.Data.Models;
+using HangfireForum.BackgroundProcessing.JobArgs;
+using HangfireForum.BackgroundProcessing.Scheduler;
 using HangfireForum.Domain.Common.Enums;
 
 namespace HangfireForum.Services.SuspenseTransferService
@@ -8,10 +10,13 @@ namespace HangfireForum.Services.SuspenseTransferService
     public class SuspenseTransferService : ISuspenseTransferService
     {
         private readonly IPaymentDataService _dataService;
+        private readonly IPaymentProcessingScheduler _paymentProcessingScheduler;
 
-        public SuspenseTransferService(IPaymentDataService dataService)
+        public SuspenseTransferService(IPaymentDataService dataService,
+                                       IPaymentProcessingScheduler paymentProcessingScheduler)
         {
-            _dataService = dataService;
+            this._dataService = dataService;
+            this._paymentProcessingScheduler = paymentProcessingScheduler;
         }
 
         public async Task<ErrorOr<Success>> TransferToSuspense(Guid paymentId)
@@ -25,7 +30,7 @@ namespace HangfireForum.Services.SuspenseTransferService
                     $"Payment {paymentId} was not found.");
             }
 
-            payment.Status = PaymentStatus.TransferringToSuspense;
+            payment.MarkAsPaymentTransferringToSuspense();
 
             await this._dataService.SaveChanges();
 
@@ -33,13 +38,7 @@ namespace HangfireForum.Services.SuspenseTransferService
 
             if (Random.Shared.Next(0, 10) == 0)
             {
-                payment.Status = PaymentStatus.Failed;
-
-                await this._dataService.SaveChanges();
-
-                return Error.Failure(
-                    "SuspenseTransfer.Failed",
-                    "The transfer to suspense failed.");
+                this._paymentProcessingScheduler.ScheduleSuspenseTransferFailure(new SuspenseTransferJobArgs(paymentId));
             }
 
             var suspenseTransaction = new SuspenseTransactionModel
@@ -52,7 +51,45 @@ namespace HangfireForum.Services.SuspenseTransferService
 
             await _dataService.CreateSuspenseTransaction(suspenseTransaction);
 
-            payment.Status = PaymentStatus.TransferredToSuspense;
+            await this._dataService.SaveChanges();
+
+            this._paymentProcessingScheduler.ScheduleSuspenseTransferSuccess(new SuspenseTransferJobArgs(paymentId));
+
+            return Result.Success;
+        }
+
+        public async Task<ErrorOr<Success>> HandleSuspenseTransferSuccess(Guid paymentId)
+        {
+            var payment = await _dataService.GetPayment(paymentId);
+
+            if (payment is null)
+            {
+                return Error.NotFound(
+                    "Payment.NotFound",
+                    $"Payment {paymentId} was not found.");
+            }
+
+            payment.MarkAsPaymentTransferredToSuspense();
+
+            await this._dataService.SaveChanges();
+
+            this._paymentProcessingScheduler.SchedulePaymentSubmission(new PaymentSubmissionJobArgs(paymentId));
+
+            return Result.Success;
+        }
+
+        public async Task<ErrorOr<Success>> HandleSuspenseTransferFailure(Guid paymentId)
+        {
+            var payment = await _dataService.GetPayment(paymentId);
+
+            if (payment is null)
+            {
+                return Error.NotFound(
+                    "Payment.NotFound",
+                    $"Payment {paymentId} was not found.");
+            }
+
+            payment.MarkAsPaymentFailed();
 
             await this._dataService.SaveChanges();
 

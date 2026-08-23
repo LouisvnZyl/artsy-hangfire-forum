@@ -12,5 +12,25 @@ namespace HanfireForum.Data.Models
         public SuspenseTransactionModel? SuspenseTransaction { get; set; }
 
         public PaymentSubmissionModel? PaymentSubmission { get; set; }
+
+        public void MarkAsPaymentTransferringToSuspense()
+        {
+            this.Status = PaymentStatus.TransferringToSuspense;
+        }
+
+        public void MarkAsPaymentTransferredToSuspense()
+        {
+            this.Status = PaymentStatus.TransferredToSuspense;
+        }
+
+        public void MarkAsPaymentSuccessful()
+        {
+            this.Status = PaymentStatus.Completed;
+        }
+
+        public void MarkAsPaymentFailed()
+        {
+            this.Status = PaymentStatus.Failed;
+        }
     }
 }
