@@ -54,6 +54,24 @@ builder.Services.AddHangfire(configuration =>
 
 builder.Services.AddHangfireServer();
 
+builder.Services.AddHangfireServer(options =>
+{
+    options.Queues = new[] { "suspense" };
+    options.WorkerCount = 3;
+});
+
+builder.Services.AddHangfireServer(options =>
+{
+    options.Queues = new[] { "submission" };
+    options.WorkerCount = 2;
+});
+
+builder.Services.AddHangfireServer(options =>
+{
+    options.Queues = new[] { "expiration" };
+    options.WorkerCount = 1;
+});
+
 builder.Services.AddScoped<IScheduler, HangfireJobScheduler>();
 
 var app = builder.Build();
