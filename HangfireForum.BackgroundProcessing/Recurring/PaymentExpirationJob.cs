@@ -1,8 +1,9 @@
 ﻿using HanfireForum.Data.DataServices;
-using HangfireForum.Domain.Common.Enums;
+using Hangfire;
 
 namespace HangfireForum.BackgroundProcessing.Recurring
 {
+    [Queue("expiration")]
     public class PaymentExpirationJob
     {
         private readonly IPaymentDataService _paymentDataService;

@@ -52,7 +52,11 @@ builder.Services.AddHangfire(configuration =>
             builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-builder.Services.AddHangfireServer();
+builder.Services.AddHangfireServer(options =>
+{
+    options.Queues = new[] { "default" };
+    options.WorkerCount = 1;
+});
 
 builder.Services.AddHangfireServer(options =>
 {
@@ -69,6 +73,12 @@ builder.Services.AddHangfireServer(options =>
 builder.Services.AddHangfireServer(options =>
 {
     options.Queues = new[] { "expiration" };
+    options.WorkerCount = 1;
+});
+
+builder.Services.AddHangfireServer(options =>
+{
+    options.Queues = new[] { "report" };
     options.WorkerCount = 1;
 });
 

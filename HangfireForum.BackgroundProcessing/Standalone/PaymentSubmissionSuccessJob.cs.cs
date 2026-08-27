@@ -1,10 +1,12 @@
-﻿using Hangfire.Server;
+﻿using Hangfire;
+using Hangfire.Server;
 using HangfireForum.BackgroundProcessing.Base;
 using HangfireForum.BackgroundProcessing.JobArgs;
 using HangfireForum.Services.PaymentSubmissionService;
 
 namespace HangfireForum.BackgroundProcessing.Standalone
 {
+    [Queue("submission")]
     public class PaymentSubmissionSuccessJob : BaseJobAsync<PaymentSubmissionJobArgs>
     {
         private readonly IPaymentSubmissionService _paymentSubmissionService;

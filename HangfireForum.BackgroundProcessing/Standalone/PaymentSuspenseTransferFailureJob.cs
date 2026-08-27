@@ -1,10 +1,12 @@
-﻿using Hangfire.Server;
+﻿using Hangfire;
+using Hangfire.Server;
 using HangfireForum.BackgroundProcessing.Base;
 using HangfireForum.BackgroundProcessing.JobArgs;
 using HangfireForum.Services.SuspenseTransferService;
 
 namespace HangfireForum.BackgroundProcessing.Standalone
 {
+    [Queue("suspense")]
     public class PaymentSuspenseTransferFailureJob : BaseJobAsync<SuspenseTransferJobArgs>
     {
         private readonly ISuspenseTransferService _suspenseTransferService;
