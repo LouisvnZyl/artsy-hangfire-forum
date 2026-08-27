@@ -11,5 +11,7 @@ namespace HangfireForum.BackgroundProcessing.Scheduler
         void SchedulePaymentSubmission(PaymentSubmissionJobArgs jobParams);
         void SchedulePaymentSubmissionSuccess(PaymentSubmissionJobArgs jobParams);
         void SchedulePaymentSubmissionFailure(PaymentSubmissionJobArgs jobParams);
+
+        void ScheduleReportGeneration(Guid paymentId);
     }
 }

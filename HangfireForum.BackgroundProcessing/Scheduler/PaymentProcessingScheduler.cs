@@ -42,5 +42,10 @@ namespace HangfireForum.BackgroundProcessing.Scheduler
         {
             this._scheduler.Enqueue<PaymentSubmissionSuccessJob, PaymentSubmissionJobArgs>(jobParams);
         }
+
+        public void ScheduleReportGeneration(Guid paymentId)
+        {
+            this._scheduler.Enqueue<PaymentReportGenerationJob, Guid>(paymentId);
+        }
     }
 }

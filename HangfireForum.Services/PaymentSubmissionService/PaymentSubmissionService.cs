@@ -91,6 +91,8 @@ namespace HangfireForum.Services.PaymentSubmissionService
 
             await this._dataService.SaveChanges();
 
+            this._paymentProcessingScheduler.ScheduleReportGeneration(paymentId);
+
             return Result.Success;
         }
 

@@ -9,6 +9,7 @@ using HangfireForum.BackgroundProcessing.Standalone;
 using HangfireForum.Domain.Common.Services;
 using HangfireForum.Services.PaymentService;
 using HangfireForum.Services.PaymentSubmissionService;
+using HangfireForum.Services.Reporting;
 using HangfireForum.Services.SuspenseTransferService;
 using HangfireForum.Services.Validation;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +29,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IPaymentDataService, PaymentDataService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<IReportingService, ReportingService>();
 builder.Services.AddScoped<IPaymentValidationService, PaymentValidationService>();
 builder.Services.AddScoped<ISuspenseTransferService, SuspenseTransferService>();
 builder.Services.AddScoped<IPaymentSubmissionService, PaymentSubmissionService>();

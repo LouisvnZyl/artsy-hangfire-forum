@@ -2,7 +2,9 @@ import requests
 import uuid
 import time
 from datetime import datetime, timezone
+import urllib3
 
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # ==============================
 # Configuration
@@ -11,7 +13,7 @@ from datetime import datetime, timezone
 ENDPOINT = "https://localhost:7208/Payment/payments"
 
 NUMBER_OF_REQUESTS = 50
-REQUEST_RATE_SECONDS = 0.05
+REQUEST_RATE_SECONDS = 0.001
 
 
 # ==============================
